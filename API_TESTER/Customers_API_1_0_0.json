@@ -1,0 +1,294 @@
+{
+  "version": 6,
+  "entities": [
+    {
+      "entity": {
+        "type": "Project",
+        "description": "An API for keeping track of your customers.",
+        "id": "c3e40648-4fc5-47f2-b9bc-b57b4e248437",
+        "name": "Customers API 1.0.0"
+      },
+      "children": [
+        {
+          "entity": {
+            "type": "Service",
+            "id": "d398ff1c-6b87-4f1d-8617-c04d49eabb30",
+            "name": "Operations"
+          },
+          "children": [
+            {
+              "entity": {
+                "type": "Scenario",
+                "id": "52488cb7-e4f4-41e3-baf8-bdd2f745176e",
+                "name": "Search, delete and re-create a customer"
+              },
+              "children": [
+                {
+                  "entity": {
+                    "type": "Request",
+                    "method": {
+                      "link": "",
+                      "name": "GET"
+                    },
+                    "uri": {
+                      "query": {
+                        "delimiter": "&",
+                        "items": []
+                      },
+                      "scheme": {
+                        "name": "http",
+                        "version": "V11"
+                      },
+                      "host": "127.0.0.1:8090",
+                      "path": "/services/customers"
+                    },
+                    "description": "Loads the list of customers",
+                    "id": "dd574607-b849-471d-bb4a-28921d928b92",
+                    "name": "Get the list of customers",
+                    "headers": [
+                      {
+                        "enabled": true,
+                        "name": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "assertions": [
+                      {
+                        "comparison": "Equals",
+                        "subject": "ResponseStatus",
+                        "path": "code",
+                        "value": "200"
+                      },
+                      {
+                        "comparison": "Exists",
+                        "subject": "ResponseBody",
+                        "path": "content",
+                        "value": "200"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "entity": {
+                    "type": "Request",
+                    "method": {
+                      "link": "",
+                      "name": "DELETE"
+                    },
+                    "uri": {
+                      "query": {
+                        "delimiter": "&",
+                        "items": []
+                      },
+                      "scheme": {
+                        "name": "http",
+                        "version": "V11"
+                      },
+                      "host": "127.0.0.1:8090",
+                      "path": "/services/customers/${getEntityById(\"dd574607-b849-471d-bb4a-28921d928b92\").\"response\".\"body\".\"0\".\"ID\"}"
+                    },
+                    "description": "Deletes a customer",
+                    "id": "2e554d4c-f78e-468a-8bdf-665c74231357",
+                    "name": "Delete a customer",
+                    "headers": []
+                  }
+                },
+                {
+                  "entity": {
+                    "type": "Request",
+                    "method": {
+                      "requestBody": true,
+                      "link": "",
+                      "name": "POST"
+                    },
+                    "body": {
+                      "bodyType": "Text",
+                      "textBody": "${getEntityById(\"dd574607-b849-471d-bb4a-28921d928b92\").\"response\".\"body\".\"0\"}"
+                    },
+                    "uri": {
+                      "query": {
+                        "delimiter": "&",
+                        "items": []
+                      },
+                      "scheme": {
+                        "name": "http",
+                        "version": "V11"
+                      },
+                      "host": "127.0.0.1:8090",
+                      "path": "/services/customers"
+                    },
+                    "description": " adds a new customer",
+                    "id": "bdeff6fa-59c1-4189-89fe-617924616bc8",
+                    "name": "Create a customer",
+                    "headers": [
+                      {
+                        "enabled": true,
+                        "name": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "enabled": true,
+                        "name": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "assertions": [
+                      {
+                        "comparison": "Equals",
+                        "subject": "ResponseStatus",
+                        "path": "code",
+                        "value": "201"
+                      },
+                      {
+                        "comparison": "Exists",
+                        "subject": "ResponseJsonBody",
+                        "path": "$.body.ID",
+                        "value": "200"
+                      },
+                      {
+                        "comparison": "Matches",
+                        "subject": "ResponseJsonBody",
+                        "path": "$.body.ID",
+                        "value": "[0-9]{6}"
+                      },
+                      {
+                        "comparison": "Exists",
+                        "subject": "ResponseJsonBody",
+                        "path": "$.body.LAST_NAME",
+                        "value": "200"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "",
+                  "name": "POST"
+                },
+                "body": {
+                  "bodyType": "Text",
+                  "textBody": "{\n\t\"ID\": \"461146\",\n\t\"NAME\": \"John\",\n\t\"LAST_NAME\": \"Smith\",\n\t\"EMAIL\": \"jsmith@vistaprint.com\",\n\t\"JOB_TITLE\": \"Electrical Engineer\",\n\t\"CREDITCARDNUMBER\": \"4343354898-76-9480\",\n\t\"COMPANY\": \"Zoonder\",\n\t\"CITY\": \"San Francisco\",\n\t\"STATE\": \"CA\"\n}"
+                },
+                "retryConfiguration": {
+                  "enabled": true,
+                  "intervalInSeconds": 10,
+                  "retryCount": 1
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8090",
+                  "path": "/services/customers"
+                },
+                "description": " adds a new customer",
+                "id": "27a4249f-2366-4909-a235-884b74ace78d",
+                "name": "Create a customer",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "enabled": true,
+                    "name": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "assertions": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "",
+                  "name": "DELETE"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8090",
+                  "path": "/services/customers/461146"
+                },
+                "description": "Deletes a customer",
+                "id": "5bdfec3e-f808-4881-97af-8b79b571ca97",
+                "name": "Delete a customer",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "",
+                  "name": "GET"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "127.0.0.1:8090",
+                  "path": "/services/customers"
+                },
+                "description": "Loads the list of customers",
+                "id": "990173aa-9573-4fe6-b36b-6f39091771b2",
+                "name": "Get the list of customers",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "enabled": true,
+                    "name": "User-Agent",
+                    "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0"
+                  }
+                ],
+                "assertions": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "environments": [
+    {
+      "id": "51b0ec33-ec46-492b-a65c-b60f9e78e3cb",
+      "name": "Customer API 1.0.0",
+      "variables": {
+        "03f83382-d1e2-4bc9-9a83-55e98b4d9053": {
+          "name": "BaseUrl",
+          "value": "https://oakisph.ap.api-mocks.com",
+          "enabled": true,
+          "createdAt": "2023-06-21T06:43:43.210Z",
+          "private": false
+        }
+      }
+    }
+  ]
+}
